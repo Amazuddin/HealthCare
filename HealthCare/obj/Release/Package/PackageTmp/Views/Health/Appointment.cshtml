@@ -1,0 +1,143 @@
+﻿@using HealthCare.Models
+
+@{
+    //Layout = null;
+    List<DoctorCategory> specialist = ViewBag.Category;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Appointment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="~/Content/appointment.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
+    <style>
+        .warning {
+            background-color: powderblue;
+            color: black;
+            font-weight: 400;
+            padding: 10px;
+            width: 28em;
+            text-align: center;
+            margin-bottom: 37px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1> @*Doctor Appointment Form*@ </h1>
+        <div class="bg-agile" style="margin-bottom: 40px;">
+            <div class="book-appointment">
+                <h2>Make an appointment</h2>
+                <center>
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="warning" id="warningLabel">
+                            <label>Appointment is Successfully taken.</label>
+                        </div>
+                    }
+                </center>
+
+                <form action="#" method="POST">
+                    <div class="left-agileits-w3layouts same">
+                        <div class="gaps">
+                            <p>Patient Name</p>
+                            <input type="text" id="patientName" name="PatientName" placeholder="" required="" />
+                        </div>
+                        <div class="gaps">
+                            <p>Phone Number</p>
+                            <input type="text" id="number" name="Number" placeholder="" required="" />
+                        </div>
+                        <div class="gaps">
+                            <p>Email</p>
+                            <input type="email" id="email" name="Email" placeholder="" required="" />
+                        </div>
+                        <div class="gaps">
+                            <p>Select Date</p>
+                            <input id="datepick" name="Date" type="text" autocomplete="off" value="" required="">
+                        </div>
+                    </div>
+                    <div class="right-agileinfo same">
+
+                        <div class="gaps">
+                            <p>Department</p>
+                            <select class="form-control" id="SpecialistId" name="SpecialistId">
+                                <option value="">SELECT</option>
+                                @foreach (DoctorCategory sp in specialist)
+                                {
+                                    <option value="@sp.Id">@sp.Title</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="gaps">
+                            <p>Doctor Name</p>
+                            <select class="form-control" id="id" name="DoctorId">
+                                <option value="">SELECT</option>
+                            </select>
+                        </div>
+                        <div class="gaps">
+                            <p>Gender</p>
+                            <select class="form-control" id="sex" name="Gender">
+                                <option></option>
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="clear"></div>
+                    <input type="submit" value="Make an appointment" id="Appointment">
+                </form>
+            </div>
+        </div>
+    </div>
+    @section scripts
+    {
+        <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+        <script src="~/Scripts/bootstrap-datepicker.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                setTimeout(function () {
+                    $("#warningLabel").hide(1000).empty();
+                }, 5000);
+
+                var asiaTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" });
+                var date = new Date(asiaTime);
+                $('#datepick').datepicker({
+                    startDate: date,
+                    //weekStart: 6,
+                    autoclose: true,
+                    todayHighlight: true
+                });
+
+                $('#SpecialistId').on('change', function () {
+
+                    var deptId = $('#SpecialistId').val();
+                    console.log(deptId);
+                    $('#id').empty();
+                    $('#id').append('<option value="">SELECT</option>');
+                    var json = { id: deptId };
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetAllDoctorNameById", "Health")',
+                        contentType: 'application/json',
+                        data: JSON.stringify(json),
+                        success: function (response) {
+                            $.each(response, function (key, value) {
+                                $('#id').append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                            });
+                        }
+                    });
+
+                });
+            });
+
+        </script>
+    }
+</body>
+</html>

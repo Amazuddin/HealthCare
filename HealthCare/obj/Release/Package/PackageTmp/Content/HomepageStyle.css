@@ -1,0 +1,94 @@
+﻿body {
+}
+ .site-blocks-cover {
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            position: relative;
+        }
+
+            .site-blocks-cover, .site-blocks-cover > .container > .row {
+                min-height: 500px;
+                height: calc(90vh);
+            }
+
+                .site-blocks-cover.inner-page, .site-blocks-cover.inner-page .row {
+                    min-height: 300px;
+                    height: 500px;
+                }
+
+                .site-blocks-cover h2 {
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: magenta;
+                    letter-spacing: .2em;
+                    text-transform: uppercase;
+                }
+
+                    .site-blocks-cover h2:hover {
+                        color: magenta;
+                    }
+
+        @media (max-width: 991.98px) {
+            .site-blocks-cover .featured-hero-product {
+                margin-top: 10%;
+                position: absolute;
+            }
+        }
+
+        .site-blocks-cover h1 {
+            font-size: 55px;
+            font-weight: 900;
+            color: black;
+            margin-bottom: 30px;
+            /*text-transform: uppercase;*/
+        }
+
+        @media (min-width: 768px) {
+            .site-blocks-cover h1 {
+                font-size: 55px;
+            }
+        }
+
+        .site-blocks-cover h1:hover {
+            color: black;
+        }
+
+        .site-blocks-cover p {
+            color: black;
+            font-size: 20px;
+            line-height: 35px;
+        }
+
+        .site-blocks-cover .intro-text {
+            font-size: 16px;
+            color: black;
+            line-height: 1.5;
+        }
+
+        .site-blocks-cover.inner-page .site-block-cover-content {
+            margin-top: 20%;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .site-blocks-cover.inner-page .site-block-cover-content {
+                margin-top: 30%;
+            }
+        }
+
+        .site-blocks-cover .sub-title {
+            color: black;
+        }
+
+        @media (max-width: 991.98px) {
+            .site-blocks-cover .img-1 {
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+       
+
+

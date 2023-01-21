@@ -1,0 +1,81 @@
+﻿@{
+    //Layout = null;
+}
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Reciption</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .fulldesign {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="container fulldesign">
+    <center>
+        <div>
+            <h1>Feedback Chart</h1>
+        </div>
+    </center>
+   
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="printableArea">
+                <canvas id="myDoughnutChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+</body>
+
+
+@section scripts
+{
+    <script src="~/Scripts/Chart.min.js"></script>
+    <script>
+        var dat = [0, 0, 0];
+        dat = JSON.parse('@ViewBag.Data');
+        
+        var data = {
+            datasets: [
+            {
+                data: dat,
+                backgroundColor: [
+                    'rgba(0, 128, 0, 0.5)',
+                    'rgba(255, 69, 0, 0.5)',
+                    'rgba(255, 0, 0, 0.5)'
+            ]
+        }],
+        labels: [
+            'Good',
+            'Average',
+            'Bad'
+        ]
+    };
+    $(document).ready(function () {
+        var ara = new Array;
+        var db = document.getElementById('myDoughnutChart');
+        var myDoughnutChart = new Chart(db, {
+            type: 'doughnut',
+            data: data
+            
+        });
+
+        
+        
+    });
+
+    </script>
+}
+
+
+
+
+
+
+

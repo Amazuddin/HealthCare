@@ -1,0 +1,268 @@
+﻿@using System.Collections.Generic
+@using HealthCare.Models
+
+@{
+    //Layout = null;
+    List<DoctorCategory> specialist = ViewBag.Category;
+}
+<meta name="viewport" content="width=device-width" />
+<title>DoctorAppointment</title>
+<link href="~/Content/DataTables/css/dataTables.bootstrap.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
+<style>
+    .tdname {
+        font-size: 20px;
+        padding-right: 14px;
+    }
+
+    .tdvalue {
+        width: 237px;
+        border: 2px solid #2c3e50;
+        border-radius: 10px;
+        height: 40px;
+        margin-top: 10px;
+    }
+
+    #tddate {
+        width: 237px;
+        border: 2px solid #2c3e50;
+        border-radius: 10px;
+        height: 40px;
+        margin-top: 10px;
+    }
+
+    .bye {
+        margin-top: 30px;
+    }
+
+    .up {
+        margin-top: 50px;
+    }
+
+    .but {
+        float: right;
+        width: 130px;
+        margin-top: 18px;
+        background-color: #3ea5c1;
+        border-color: #3ea5c1;
+    }
+    .appr {
+        background-color: #28a745;
+        color: white;
+        text-align: center;
+        padding-top: 12px;
+    }
+    .normal {
+        background-color: orangered;
+        color: white;
+        text-align: center;
+        padding-top: 12px;
+    }
+    .appointmentlist {
+        margin-bottom: 30px;
+        /*margin: 20px;
+    
+        border: 3px solid black;
+        /*padding: 24px;
+        
+        border-style: inset;
+        box-shadow: 0px 0px 31px #d8d4d4;
+        border-radius: 20px 20px 0 0;*/
+    }
+</style>
+<body>
+<div class="appointmentlist">
+
+    <form action="" method="POST">
+        <center>
+            <table class="up">
+                <tr>
+                    <td class="tdname">Specialist:</td>
+                    <td>
+                        <select id="SpecialistId" class="form-control tdvalue" name="Specialist" required="">
+                            <option>Select</option>
+                            @foreach (DoctorCategory sp in specialist)
+                            {
+                                <option value="@sp.Id">@sp.Title</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdname">Doctor:</td>
+                    <td>
+                        <select id="id" class="form-control tdvalue" name="DoctorName" required="">
+                            <option>Select</option>
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdname">Date:</td>
+                    <td>
+                        <input type="text" class="form-control" id="tddate" placeholder="Date" required="" autocomplete="off"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button class="btn btn-info but" id="searchbtn" style="">Search</button></td>
+                </tr>
+            </table>
+        </center>
+
+    </form>
+    <div class="row bye">
+        <div class="col-md-1"></div>
+        <div class="col-md-10 design">
+            <table class="table table-bordered table-striped table-hover" id="patienttable">
+                <thead>
+                <tr>
+                    <th>Serial No</th>
+                    <th>Patient Name</th>
+                    <th>Mobile Number</th>
+                    <th>Email</th>
+                    <th>Gender</th>
+                    <th>Current Status</th>
+                    <th style="width: 150px;">Approval</th>
+
+                </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+
+            </table>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+</body>
+
+@section scripts
+{
+
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        
+
+        function approve(value) {
+            var docId = $('#id').val();
+            var date = $('#tddate').val();
+            var json = { id: value, value: 1, docId: docId, date: date };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ChangeApproval", "Health")',
+                contentType: 'application/json',
+                data: JSON.stringify(json),
+                success: function (response) {
+                    var k = parseInt(response);
+                    if (k === 1) {
+                        $('#searchbtn').click();
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('#tddate').datepicker({
+                //startDate: date,
+                //weekStart: 6,
+                autoclose: true,
+                todayHighlight: true
+            });
+            //var table = $('#patienttable').DataTable();
+            var table = $('#patienttable').DataTable({
+                "columnDefs":
+                [
+                    {
+                        "targets": [5], // first CELL That will be checked,
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            if (cellData === 'Approved') {
+                                $(td).addClass('appr');
+                            } else {
+                                $(td).addClass('normal');
+                            }
+                        }
+                    }
+                ]
+            });
+
+            $('#searchbtn').on('click', function () {
+                table.clear();
+
+                var id = $('#id').val();
+                var date = $('#tddate').val();
+                var serialNo = 1;
+                var ap, bttn;
+                var json = { id: id, date: date };
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetAllPatientByDoctorId", "Health")',
+                    contentType: 'application/json',
+                    data: JSON.stringify(json),
+                    success: function (response) {
+
+                        $.each(response, function (key, value) {
+                            if (value.IsAccepted === 0)
+                                ap = "Pending";
+                            else if (value.IsAccepted === 1) {
+                                ap = "Accepted";
+                               
+                            } 
+                            bttn = "<button onclick=\"approve(" + value.Id + ");\" style=\"width:100%;\" class=\"btn btn-success\" id=\"apprbtn\">Approve</button>";
+                            table.row.add([
+                                serialNo,
+                                value.PatientName,
+                                value.Number,
+                                value.Email,
+                                value.Gender,
+                                ap,
+                                bttn
+
+                            ]).draw(false);
+                            serialNo += 1;
+                        });
+
+                    }
+
+                });
+                return false;
+            });
+
+
+
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#SpecialistId').on('change', function () {
+
+                var Id = $('#SpecialistId').val();
+
+                $('#id').empty();
+
+                $('#id').append('<option value="">SELECT</option>');
+                var json = { id: Id };
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetAllDoctorNameById", "Health")',
+                    contentType: 'application/json',
+                    data: JSON.stringify(json),
+                    success: function (response) {
+                        $.each(response, function (key, value) {
+                            $('#id').append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                        });
+                    }
+                });
+
+            });
+        });
+
+    </script>
+}

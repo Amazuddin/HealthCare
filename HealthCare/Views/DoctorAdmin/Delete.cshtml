@@ -1,0 +1,108 @@
+﻿@model HealthCare.Models.Doctor
+
+<meta name="viewport" content="width=device-width" />
+<title>Delete</title>
+<link href="~/Content/DataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<style>
+    .kt {
+        width: 115px;
+    }
+
+    .bt {
+        width: 115px;
+    }
+
+    .dld {
+        margin-left: 100px;
+        margin-top: 80px;
+        margin-right: 100px;
+        padding: 55px 100px;
+        background-color: #f5f9fd;
+        border: 0px;
+        border-style: outset;
+        box-shadow: 0px 0px 20px #d8d4d4;
+        border-radius: 10px;
+        margin-bottom: 50px;
+    }
+
+    #mytable {
+        margin-bottom: 20px;
+    }
+
+    .aa {
+        margin-top: 60px;
+    }
+</style>
+<div class="dld">
+    <h3>Are you sure to delete this?</h3>
+    
+    <table id="mytable" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Image)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Degree)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Fees)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Schedule)
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @Html.DisplayFor(item => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(item => item.Email)
+                </td>
+                <td >
+                    <img style="height: 90px;" src="~/@Html.DisplayFor(item => item.Image)">
+                </td>
+                <td>
+                    @Html.DisplayFor(item => item.Degree)
+                </td>
+                <td>
+                    @Html.DisplayFor(item => item.Fees)
+                </td>
+                <td>
+                    @Html.DisplayFor(item => item.Schedule)
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+    <center>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color aa">
+                <input type="submit" value="Delete" class="btn btn-danger kt" /> |
+                @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-dark bt" })
+            </div>
+        }
+    </center>
+</div>
+@section scripts{
+    <script src="~/Scripts/DataTables/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            // var table = $('#mytable').DataTable();
+        });
+    </script>
+}

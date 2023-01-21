@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title HealthCare</title>
+    <link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="~/Content/fontawesome-all.min.css" rel="stylesheet" />
+
+    <style>
+        @@media (max-width: 576px) {
+            .gone {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="background-color: white; margin-right: 0px;" class="row gone">
+        <div class="col-md-1"></div>
+        <div class="col-md-3" style="margin-right: -104px;">
+            <i class=" fa fa-address-book">
+            </i>
+            <b>Emergency: </b>+01814325325
+        </div>
+        <div class="col-md-2">
+            <span class="fa fa-envelope"></span>
+            healthcare@gmail.com
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-2">
+            <span class="fa fa-map-marker"></span>
+            BGCMed,Chittagong
+        </div>
+    </div>
+    <nav style="background-color: #157fda;" class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand myclass" href="#">
+            <img src="~/picture/healthcare3.png" class="logo-img">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="menual collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+
+            @if (Session["PatientId"] == null && Session["DoctorId"] == null && Session["ReceptionistId"] == null && Session["AdminId"] == null)
+            {
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link text-white @ViewBag.index" href="@Url.Action("Index", "Health")">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link text-white @ViewBag.Doctor" href="@Url.Action("DoctorInformation", "Health")">Doctor</a>
+                    <a class="nav-item nav-link text-white @ViewBag.Doctor" href="@Url.Action("Feedback", "Health")">Feedback</a>
+                    <a class="nav-item nav-link text-white @ViewBag.Login" href="@Url.Action("Login", "Authentication")">login</a>
+                    <a class="nav-item nav-link text-white @ViewBag.Registration" href="@Url.Action("Registration", "Authentication")">Registration</a>
+                </div>
+            }
+            @if (Session["PatientId"] != null)
+            {
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link text-white @ViewBag.index" href="@Url.Action("Index","Health")">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link text-white  @ViewBag.Appointment" href="@Url.Action("Appointment", "Health")">Appointment</a>
+                    <a class="nav-item nav-link text-white @ViewBag.Doctor" href="@Url.Action("DoctorInformation", "Health")">Doctor</a>
+                    <a class="nav-item nav-link text-white @ViewBag.PatientProfile" href="@Url.Action("PatientProfile", "Health")">Profile</a>
+                    <a class="nav-item nav-link text-white @ViewBag.HospitalContact" href="@Url.Action("Notification", "Health")">Notification<sup><span id="patientnotification" style="display: none;" class="notified fa fa-bell"> @Session["PatientNotification"]</span></sup></a>
+                    <a class="nav-item nav-link text-white" href="@Url.Action("PatientLogout", "Authentication")">Logout</a>
+                </div>
+            }
+            @if (Session["DoctorId"] != null)
+            {
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link @ViewBag.Index" href="@Url.Action("Index", "Health")">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link  @ViewBag.ReciptionistProfile" href="@Url.Action("Prescription","Health")">Prescription</a>
+                    <a class="nav-item nav-link  @ViewBag.ReciptionistProfile" href="@Url.Action("DoctorProfile","Health")">Profile</a>
+                    <a class="nav-item nav-link " href="@Url.Action("DoctorLogout", "Authentication")">Logout</a>
+
+                </div>
+            }
+           
+            @if (Session["ReceptionistId"] != null)
+            {
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link @ViewBag.Index" href="@Url.Action("Index","Health")">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link @ViewBag.DoctorAppointment" href="@Url.Action("AppointmentSchedule", "Health")">Appointment</a>
+                    <a class="nav-item nav-link @ViewBag.Graph" href="@Url.Action("Graph", "Health")">Feedback</a>
+                    <a class="nav-item nav-link  @ViewBag.ReciptionistProfile" href="@Url.Action("ReceptionistProfile","Health")">Profile</a>
+                    <a class="nav-item nav-link " href="@Url.Action("ReceptionistLogout", "Authentication")">Logout</a>
+                </div>
+            }
+            @if (Session["AdminId"] != null)
+            {
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link text-white @ViewBag.Index" href="@Url.Action("Index","Health")">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link text-white @ViewBag.Save" href="@Url.Action("Index","DoctorAdmin")">Doctor</a>
+                    <a class="nav-item nav-link text-white @ViewBag.ReceptionistCreate " href="@Url.Action("Index", "ReceptionistAdmin")">Receptionist</a>
+                    <a class="nav-item nav-link text-white " href="@Url.Action("AdminLogout", "Authentication")">Logout</a>
+                </div>
+            }
+
+        </div>
+    </nav>
+
+    @RenderBody()
+
+    <footer class="footer-distributed">
+
+        <div class="footer-left">
+            <p class="footer-company-about">
+                <span>BGC TRUST UNIVERSITY</span>
+                Afsari Rubaba
+            </p>
+
+            <div class="footer-icons">
+
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+
+            </div>
+
+
+            
+        </div>
+
+        <div class="footer-center">
+
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>CDA-5 street</span> Agrabad, Chittagong</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+01814652562</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="#">healthcare@gmail.com</a></p>
+            </div>
+
+        </div>
+
+        <div class="footer-right">
+
+            <h3>Health<span>Care</span></h3>
+
+            <p class="footer-links">
+                We are dedicate to providing the best possible<br> health care for the people to get better health.
+            </p>
+
+            <p class="footer-company-name">2020</p>
+
+        </div>
+
+    </footer>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    @*<script>
+        var k = parseInt($('#patientnotification').html()) || 0;
+        console.log(k);
+
+        if (k > 0) {
+            $('#patientnotification').show();
+        }
+
+    </script>*@
+
+</body>
+</html>
+
+
